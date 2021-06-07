@@ -5,7 +5,7 @@ const User = require("../models/user");
 const NotFoundError = require('../errors/not-found-error');
 const WrongDataError = require('../errors/wrong-request-data');
 const DatabaseError = require('../errors/db-error');
-require('dotenv').config({ path: path.join(__dirname, '.env')});
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -19,11 +19,12 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : "asdfasdf",
-        { expiresIn: '7d' });
+        { expiresIn: '7d' }
+      );
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true
-      }).send({user});
+      }).send({ user });
     })
     .catch(next);
 };
@@ -31,7 +32,7 @@ module.exports.login = (req, res, next) => {
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt', { path: '/' });
   return res.sendStatus(200);
-}
+};
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id, { __v: 0 })

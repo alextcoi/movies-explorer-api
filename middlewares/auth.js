@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const AuthLoginError = require('../errors/auth-login-error');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env')});
+const AuthLoginError = require('../errors/auth-login-error');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -18,7 +18,8 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(
       token,
-      NODE_ENV === "production" ? JWT_SECRET : "asdfasdf");
+      NODE_ENV === "production" ? JWT_SECRET : "asdfasdf"
+    );
   } catch (err) {
     throw new AuthLoginError('Необходима авторизация');
   }

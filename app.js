@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env')});
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 // const cors = require("cors");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -25,6 +25,7 @@ const app = express();
 // }));
 
 // https://lastsprint.nomoredomains.monster
+// https://api.tcoi.nomoredomains.icu
 // http://localhost:3001
 
 app.use(express.json());

@@ -10,9 +10,13 @@ module.exports.getMovies = (req, res, next) => {
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const { country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId } = req.body;
+  const {
+    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId
+  } = req.body;
 
-  Movie.create({ country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId , owner: req.user._id })
+  Movie.create({
+    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId, owner: req.user._id
+  })
     .then((movie) => {
       res.send(movie);
     })
