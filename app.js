@@ -1,16 +1,12 @@
-const express = require("express");
+const express = require('express');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 // const cors = require("cors");
-const mongoose = require("mongoose");
-const helmet = require("helmet");
-const { errors, celebrate, Joi } = require('celebrate');
-const moviesRouter = require("./routes/movies");
-const usersRouter = require("./routes/users");
-const { login, createUser, logout } = require("./controllers/users");
+const mongoose = require('mongoose');
+const helmet = require('helmet');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const auth = require("./middlewares/auth");
-const NotFoundError = require('./errors/not-found-error');
+const routes = require('./routes/index');
 
 const {
   PORT = 3000,
@@ -33,38 +29,12 @@ app.use(helmet());
 
 app.use(requestLogger);// логгер запросов
 
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().min(8).required(),
-  })
-}), login);// логинимся на сервисе
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().required().email(),
-    password: Joi.string().min(8).required(),
-  })
-}), createUser);// регистрация нового пользователя
-
-app.use(auth);// вход по токену
-
-app.use("/users", usersRouter);// методы для пользователей
-app.use("/movies", moviesRouter);// методы для карточек
-
-app.post('/signout', logout);// метод для разлогиннига
-
-app.use("/:wrongRoute", (req, res, next) => {
-  const err = new NotFoundError('Такой страницы у нас нет');
-  next(err);
-});// проверка корректности роута
+app.use(routes);
 
 app.use(errorLogger); // логгер ошибок
 
 app.use(errors());// проверка данных для сервера
 
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
@@ -73,8 +43,10 @@ app.use((err, req, res, next) => {
     .send({
       message: statusCode === 500
         ? 'На сервере произошла ошибка'
-        : message
+        : message,
     });
+
+  next();
 });// централизованная обработка ошибок
 
 async function launch() {
@@ -82,7 +54,7 @@ async function launch() {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   });
 
   await app.listen(PORT);

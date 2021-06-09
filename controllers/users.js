@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const User = require("../models/user");
+const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const WrongDataError = require('../errors/wrong-request-data');
 const DatabaseError = require('../errors/db-error');
@@ -18,12 +18,12 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "asdfasdf",
-        { expiresIn: '7d' }
+        NODE_ENV === 'production' ? JWT_SECRET : 'asdfasdf',
+        { expiresIn: '7d' },
       );
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
-        httpOnly: true
+        httpOnly: true,
       }).send({ user });
     })
     .catch(next);
@@ -49,14 +49,14 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => {
-      res.send(user);
+      res.send({ ...user._doc, password: undefined });
     })
     .catch((err) => {
-      if (err.name === "TypeError") {
-        throw new WrongDataError("Переданы некорректные данные при поиске пользователя");
+      if (err.name === 'TypeError') {
+        throw new WrongDataError('Переданы некорректные данные при поиске пользователя');
       }
-      if (err.name === "MongoError" && err.code === 11000) {
-        throw new DatabaseError("Пользователь с указанным email уже существует");
+      if (err.name === 'MongoError' && err.code === 11000) {
+        throw new DatabaseError('Пользователь с указанным email уже существует');
       }
     })
     .catch(next);
@@ -69,7 +69,7 @@ module.exports.updateProfile = (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
     },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .then((item) => {
       if (!item) { throw new NotFoundError('Пользователь по указанному _id не найден'); }
@@ -77,9 +77,11 @@ module.exports.updateProfile = (req, res, next) => {
     })
     .catch((err) => {
       if (err.statusCode === 404) { next(err); }
-      if (err.name === "CastError" || err.name === "TypeError") {
-        throw new WrongDataError("Переданы некорректные данные при поиске пользователя");
+      if (err.name === 'TypeError') {
+        throw new WrongDataError('Переданы некорректные данные при поиске пользователя');
       }
+
+      throw err;
     })
     .catch(next);
 };

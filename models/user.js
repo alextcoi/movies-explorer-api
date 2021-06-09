@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const isEmail = require("validator/lib/isEmail");
+const isEmail = require('validator/lib/isEmail');
 const ForbiddenError = require('../errors/forbidden-error');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    default: 'Новый пользователь',
     minlength: 2,
     maxlength: 30,
   },
@@ -16,9 +15,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isEmail(v),
-      message: "Неправильный формат почты",
+      message: 'Неправильный формат почты',
     },
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -45,4 +44,4 @@ userSchema.statics.findUserByCredentials = function (email, password) {
     });
 };
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);

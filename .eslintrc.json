@@ -11,11 +11,6 @@
     "ecmaVersion": 12
   },
   "rules": {
-    "no-underscore-dangle": "off",
-    "quotes": "off",
-    "comma-dangle": "off",
-    "max-len": "off",
-    "no-useless-escape": "off",
-    "func-names": "off"
+    "no-underscore-dangle": "off"
   }
 }

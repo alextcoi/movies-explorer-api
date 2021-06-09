@@ -1,4 +1,4 @@
-const Movie = require("../models/movie");
+const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-error');
 const WrongDataError = require('../errors/wrong-request-data');
 const ForbiddenError = require('../errors/forbidden-error');
@@ -11,18 +11,39 @@ module.exports.getMovies = (req, res, next) => {
 
 module.exports.createMovie = (req, res, next) => {
   const {
-    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
   } = req.body;
 
   Movie.create({
-    country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId, owner: req.user._id
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner: req.user._id,
   })
     .then((movie) => {
       res.send(movie);
     })
     .catch((err) => {
-      if (err.name === "TypeError") {
-        throw new WrongDataError("Переданы некорректные данные при создании карточки");
+      if (err.name === 'TypeError') {
+        throw new WrongDataError('Переданы некорректные данные при создании карточки');
       }
     })
     .catch(next);
@@ -46,8 +67,8 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .catch((err) => {
       if (err.statusCode === 404 || err.statusCode === 403) { next(err); }
-      if (err.name === "CastError" || err.name === "TypeError") {
-        throw new WrongDataError("Переданы некорректные данные при удалении карточки");
+      if (err.name === 'CastError' || err.name === 'TypeError') {
+        throw new WrongDataError('Переданы некорректные данные при удалении карточки');
       }
     })
     .catch(next);
