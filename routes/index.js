@@ -21,10 +21,10 @@ routes.post('/signup', celebrate({
   }),
 }), createUser);// регистрация нового пользователя
 
-routes.use(auth);// вход по токену
+// routes.use(auth);// вход по токену
 
-routes.use('/users', usersRouter);// методы для пользователей
-routes.use('/movies', moviesRouter);// методы для карточек
+routes.use('/users', auth, usersRouter);// методы для пользователей
+routes.use('/movies', auth, moviesRouter);// методы для карточек
 
 routes.use((req, res, next) => {
   const err = new NotFoundError('Такой страницы у нас нет');
