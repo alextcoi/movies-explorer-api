@@ -17,7 +17,6 @@ const app = express();
 
 app.use(cors({
   origin: ['https://tcoi.nomoredomains.club', 'http://tcoi.nomoredomains.club'],
-  credentials: true,
 }));
 
 // https://lastsprint.nomoredomains.monster
