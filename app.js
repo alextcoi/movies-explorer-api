@@ -16,7 +16,7 @@ const {
 const app = express();
 
 app.use(cors({
-  origin: 'https://tcoi.nomoredomains.club',
+  origin: ['https://tcoi.nomoredomains.club', 'http://tcoi.nomoredomains.club'],
   credentials: true,
 }));
 
