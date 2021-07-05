@@ -2,7 +2,7 @@ const routes = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const moviesRouter = require('./movies');
 const usersRouter = require('./users');
-const { login, createUser, logout } = require('../controllers/users');
+const { login, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 const NotFoundError = require('../errors/not-found-error');
 
@@ -25,8 +25,6 @@ routes.use(auth);// вход по токену
 
 routes.use('/users', usersRouter);// методы для пользователей
 routes.use('/movies', moviesRouter);// методы для карточек
-
-routes.post('/signout', logout);// метод для разлогиннига
 
 routes.use((req, res, next) => {
   const err = new NotFoundError('Такой страницы у нас нет');

@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
-// const cors = require("cors");
+const cors = require('cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
@@ -15,10 +15,10 @@ const {
 
 const app = express();
 
-// app.use(cors({
-//   origin: 'https://lastsprint.nomoredomains.monster',
-//   credentials: true,
-// }));
+app.use(cors({
+  origin: 'https://tcoi.nomoredomains.icu',
+  credentials: true,
+}));
 
 // https://lastsprint.nomoredomains.monster
 // https://api.tcoi.nomoredomains.icu

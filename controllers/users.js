@@ -16,22 +16,15 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      const userInfo = { ...user._doc, password: undefined };
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'asdfasdf',
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      }).send({ user });
+      res.send({ token, userInfo });
     })
     .catch(next);
-};
-
-module.exports.logout = (req, res) => {
-  res.clearCookie('jwt', { path: '/' });
-  return res.sendStatus(200);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
@@ -49,7 +42,13 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => {
-      res.send({ ...user._doc, password: undefined });
+      const userInfo = { ...user._doc, password: undefined };
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'asdfasdf',
+        { expiresIn: '7d' },
+      );
+      res.send({ userInfo, token });
     })
     .catch((err) => {
       if (err.name === 'TypeError') {

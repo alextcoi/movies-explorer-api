@@ -16,23 +16,12 @@ moviesRouter.post('/', celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().custom((value, helpers) => {
-      if (validator.isURL(value)) {
-        return value;
-      }
-      return helpers.message('Поле image заполнено некорректно');
-    }),
+    image: Joi.object().required(),
     trailer: Joi.string().required().custom((value, helpers) => {
       if (validator.isURL(value)) {
         return value;
       }
       return helpers.message('Поле trailer заполнено некорректно');
-    }),
-    thumbnail: Joi.string().required().custom((value, helpers) => {
-      if (validator.isURL(value)) {
-        return value;
-      }
-      return helpers.message('Поле thumbnail заполнено некорректно');
     }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
