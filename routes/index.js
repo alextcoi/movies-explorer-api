@@ -21,6 +21,10 @@ routes.post('/signup', celebrate({
   }),
 }), createUser);// регистрация нового пользователя
 
+routes.get('/health', (req, res) => {
+  res.send('проверка здоровья');
+});
+
 routes.use(auth);// вход по токену
 
 routes.use('/users', usersRouter);// методы для пользователей
